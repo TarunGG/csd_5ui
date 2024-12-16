@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>TempConv</h1>
+    </header>
+    <main>
+        <input id="cel_inp" value="0" type="number">
+        <span><sup>O</sup>C</span>
+        <span>=</span>
+        <input id="fah_inp" value="32.00" type="number">
+        <span><sup>O</sup>F</span>
+    </main>
+
+    <script>
+        let cel_inp = document.getElementById("cel_inp")
+        let fah_inp = document.getElementById("fah_inp")
+        var prev_cel, prev_fah;
+        cel_inp.addEventListener("input", () => {
+            if (cel_inp.value == "") {
+                fah_inp.value = ""
+                return
+            }
+            let num = parseFloat(cel_inp.value)
+
+            if(num > 1000||num < -273.15){
+                cel_inp.value = prev_cel
+                return
+            }
+
+            prev_cel = cel_inp.value
+            let newVal = (num * 1.80) + 32
+
+            fah_inp.value = newVal.toFixed(2)
+
+           
+        })
+        fah_inp.addEventListener("input", () => {
+            if (fah_inp.value == "") {
+                cel_inp.value = ""
+                return
+            }
+            
+            let num = parseFloat(fah_inp.value)
+            if(num>1832||num<-459.67){
+                fah_inp.value = prev_fah
+                return;
+            }
+            prev_fah= fah_inp.value
+            let newVal = (num / 1.80) - 32
+            cel_inp.value = newVal.toFixed(2)
+           
+        })
+
+    </script>
+</body>
+
+</html>
