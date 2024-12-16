@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Counter App</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            /* width: 100%; */
+
+        }
+
+        button {
+            width: 176px;
+            height: 48px;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <h3>Counter</h3>
+    </header>
+    <main>
+        <input id="count-value" type="text"  value="0" readonly>
+       <button id="cnt-btn">Count</button>
+    </main>
+
+    <script>
+        let num = document.getElementById("count-value")
+        let btn = document.getElementById("cnt-btn")
+        btn.addEventListener("click",()=>{
+            let c = parseInt(num.value,10)
+            num.value = (c+1).toString();
+            
+        })
+    
+    </script>
+
+
+</body>
+
+</html>
