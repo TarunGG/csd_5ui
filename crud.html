@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD</title>
+    <style>
+        body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        main {
+            display: flex;
+            width: 752px;
+            padding: 16px;
+
+        }
+
+        .left_container {
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+
+            padding: 10px;
+        }
+
+        .right_container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 416px;
+            padding: 10px;
+        }
+
+        input {
+            width: 90%;
+            padding: 0;
+        }
+
+        #user_list {
+            width: 90%;
+            height: 320px;
+            overflow: scroll;
+        }
+
+        .btn_div {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>
+            CRUD
+        </h1>
+    </header>
+
+    <main>
+        <div class="left_container">
+            <div class="filter">
+                <label for="fltr_inp">Filter prefix:</label>
+                <br>
+                <input type="text" id="fltr_inp" oninput="clearNDraw()">
+            </div>
+            <div id="user_list"></div>
+        </div>
+        <div class="right_container">
+            <div class="input_fields">
+                <label for="name_inp">name</label>
+                <br>
+                <input type="text" id="name_inp" oninput="update_button()" required>
+                <br>
+                <label for="surname_inp" oninput="update_button()">surname</label>
+                <br>
+                <input type="text" id="surname_inp" required>
+            </div>
+            <div class="btn_div">
+                <button id="crt_btn" onclick="createUser()" disabled>Create</button>
+                <button id="upt_btn" onclick="updateUser()">Update</button>
+                <button id="dlt_btn" onclick="deleteUser()">Delete</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var all_users = [];
+        var search_term = document.getElementById("fltr_inp");
+        var first_name = document.getElementById("name_inp");
+        var surname = document.getElementById("surname_inp");
+        var prev_first = "";
+        var prev_sur = "";
+        var selected_user;
+
+        
+        function draw(){
+            var search_result = document.querySelector("#user_list")
+            search_result.innerHTML="";
+            var filtered = all_users.filter((user) => {
+                return user[1].includes(search_term.value)});
+            filtered.forEach((user,i)=>{
+                var ele = document.createElement("div");
+                ele.id = "usr"+i;
+                ele.class = "user-item";
+                ele.innerText = user[1] + ", " + user[0];
+                if(selected_user != null && selected_user == i){
+                    ele.classList.add("focused-user");
+                    document.querySelector("#delete").removeAttribute("disabled");
+                    first_name.value = all_users[selected_user][0]
+                    surname.value = all_users[selected_user][1]
+                }
+                ele.onclick = (e)=>{
+                    selected_user = parseInt(e.target.id.substring(3))
+                    draw()
+                    update_button()
+                }
+                search_result.appendChild(ele);
+            })
+        }
+
+        function clearNDraw(){
+            name.value = ""
+            surname.value = ""
+            selected_user = null
+            draw()
+            update_button()
+        }
+
+        function createUser(){
+            all_users.push([first_name.value,surname.value]);
+            if(selected_user==null){
+                clearNDraw()
+            }else{
+                selected_user=all_users.length-1;
+                draw()
+                update_button()
+            }
+        }
+
+        function deleteUser(){
+            all_users.splice(selected_user,1);
+            clearNDraw()
+        }
+
+        function updateUser(){
+            all_users[selected_user] = [first_name.value,surname.value]
+            draw()
+            update_button()
+        }
+
+        function update_button(){
+            if(first_name.value.length > 20){
+                first_name.value = prev_first
+            }
+            if(surname.value.length > 20){
+                surname.value = prev_sur
+            }
+            prev_first = first_name.value
+            prev_sur = surname.value
+            var update = document.getElementById("upt_btn");
+            var create = document.getElementById("crt_btn");
+            var delete_ = document.getElementById("dlt_btn");
+            if(selected_user!=null){
+                delete_.removeAttribute("disabled");
+            }else{
+                delete_.setAttribute("disabled","");
+            }
+            if(selected_user==null || (all_users[selected_user][0] == first_name.value && all_users[selected_user][1]== surname.value)){
+                update.setAttribute("disabled","");
+            }else{
+                update.removeAttribute("disabled");
+            }
+            if(first_name.value == "" && surname.value == ""){
+                create.setAttribute("disabled","");
+            }else{
+                create.removeAttribute("disabled");
+            }
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
