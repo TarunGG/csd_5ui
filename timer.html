@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* justify-content: stretch; */
+        }
+
+        header {
+            text-align: center;
+        }
+        .top_container{
+            display: flex;
+        }
+        .lef{
+            display: flex;
+            flex-direction: column;
+            align-items: self-end;
+        }
+        .bottom_container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Timer</h1>
+        </header>
+        <main>
+            <div class="top_container">
+                <label for="elapse_time">Elapsed Time: </label>
+                <div class="lef">
+                <progress id="elapse_time" max="15" value="0"></progress>
+                <span id="ticker">0.0</span>
+                </div>
+                
+            </div>
+            <div class="mid_container">
+                <label for="time_duration">Time Duration: </label>
+                <input type="range" id="time_duration" onchange="jump()" step="1" min="1" max="30">
+                <output for="time_slider"></output>
+            </div>
+            <div class="bottom_container">
+                <button id="rst_btn">Reset Timer</button>
+            </div>
+        </main>
+    </div>
+    <script>
+        let time_elapse = document.getElementById("elapse_time")
+        let duration_selector = document.getElementById("time_duration")
+        let ticker = document.getElementById("ticker")
+        let btn = document.getElementById("rst_btn")
+        let time_elapsed = 0
+        let change = 0
+        let duration = 15;
+        let t = new Date()
+        jump();
+        function jump() {
+            let new_dur = duration_selector.value
+            // console.log(new_dur);
+            let tm = setInterval(() => {
+                if (time_elapse.value >= duration) {
+                    clearInterval(tm)
+                } else {
+                    time_elapse.value = Math.floor((new Date()-t)/1000);
+                    time_elapsed=((new Date()-t)/1000).toFixed(1);
+                    ticker.innerText = time_elapsed.toString()
+                }
+            }, 100)
+        }
+        time_elapse.addEventListener("change",()=>{
+            
+                time_elapse.max = new_dur
+                time_elapse.value = (new Date() - t) / 1000
+                duration = new_dur
+                jump()
+                console.log(time_elapse.value)
+            
+        })
+        btn.addEventListener("click",()=>{
+            time_elapse.value = 0;
+            time_elapsed = 0;
+            t = new Date()
+            jump()
+        })
+
+
+    </script>
+</body>
+
+</html>
